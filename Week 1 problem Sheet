@@ -1,0 +1,7 @@
+Difference between Classification and Regression
+
+
+Classifcation: It is a method in Supervised learning  which labels the final output into groups like whether a musical instrument is piano or guitar. It classifies the output into groups based on the patterns and learnings from the data we trained
+Common Classification models:Logistic Regression, KNN (K-Nearest Neighbors) ,Decision Tree ,Naive Bayes.
+Reggression: It is a method in supervised learning which predicts a continuos value ranged outputs like what will my CPI be this semester. It works on data that predicts a continuous range based values.
+Common Regression models: Linear regression,Polynomial Regression, Descision tree regression.
