@@ -1,146 +1,169 @@
-# Neural Network Fundamentals Problem Sheet
+# Neural Network Fundamentals – Problem Sheet
 
-## Part 1: Derivations
+## Part 1: Mathematical Derivations
 
-### 1.1 Gradient of ReLU Function
+### 1.1 Gradient of the ReLU Function
 
-**ReLU Definition:**
-$$\text{ReLU}(x) = \max(0, x) = \begin{cases} x & \text{if } x > 0 \\ 0 & \text{if } x \leq 0 \end{cases}$$
+**Definition**
+[
+\text{ReLU}(x) = \max(0, x) =
+\begin{cases}
+x & \text{if } x > 0 \
+0 & \text{if } x \leq 0
+\end{cases}
+]
 
-**Derivative:**
-$$\frac{d}{dx}\text{ReLU}(x) = \begin{cases} 1 & \text{if } x > 0 \\ 0 & \text{if } x < 0 \\ \text{undefined} & \text{if } x = 0 \end{cases}$$
+**Derivative**
+[
+\frac{d}{dx}\text{ReLU}(x) =
+\begin{cases}
+1 & \text{if } x > 0 \
+0 & \text{if } x < 0 \
+\text{undefined} & \text{if } x = 0
+\end{cases}
+]
 
-In practice, we set the derivative at x = 0 to either 0 or 1 (commonly 0).
+In practice, the derivative at (x = 0) is set to **0**.
 
-**Key Properties:**
-- **Non-saturating**: Gradient is  (1) for positive inputs
-- **Sparse activation**: Produces exactly zero for negative inputs
-- **Computationally efficient**: Simple thresholding operation
+**Key Properties**
 
+* **Non-saturating:** Constant gradient of 1 for positive inputs
+* **Sparse activation:** Outputs zero for negative inputs
+* **Computationally efficient:** Simple threshold operation
 
+---
 
-### 1.2 Gradient of Sigmoid Function
+### 1.2 Gradient of the Sigmoid Function
 
-**Sigmoid Definition:**
-$$\sigma(x) = \frac{1}{1 + e^{-x}}$$
+**Definition**
+[
+\sigma(x) = \frac{1}{1 + e^{-x}}
+]
 
-**Derivative:**
-$$\frac{d}{dx}\sigma(x) = \sigma(x)(1 - \sigma(x))$$
+**Derivative**
+[
+\frac{d}{dx}\sigma(x) = \sigma(x)(1 - \sigma(x))
+]
 
-**Proof:**
-$$\frac{d}{dx}\sigma(x) = \frac{d}{dx}\left(\frac{1}{1 + e^{-x}}\right)$$
-$$= -\frac{1}{(1 + e^{-x})^2} \cdot (-e^{-x})$$
-$$= \frac{e^{-x}}{(1 + e^{-x})^2}$$
-$$= \frac{1}{1 + e^{-x}} \cdot \frac{e^{-x}}{1 + e^{-x}}$$
-$$= \sigma(x) \cdot \frac{e^{-x}}{1 + e^{-x}} = \sigma(x)(1 - \sigma(x))$$
+**Proof**
+[
+\frac{d}{dx}\left(\frac{1}{1 + e^{-x}}\right)
+= \frac{e^{-x}}{(1 + e^{-x})^2}
+= \sigma(x)(1 - \sigma(x))
+]
 
-**Key Properties:**
-- **Maximum gradient**: 0.25 (at x = 0)
-- **Vanishing gradient**: For |x| > 5, gradient approaches 0
-- **Output range**: (0, 1), useful for probabilities
+**Key Properties**
 
+* **Maximum gradient:** 0.25 at (x = 0)
+* **Vanishing gradient:** Gradients approach zero for large |x|
+* **Output range:** (0, 1), suitable for probabilities
 
+---
 
 ### 1.3 Loss Functions and Their Impact on Convergence
 
-#### **Mean Squared Error (MSE) - Regression**
+#### Mean Squared Error (MSE) — Regression
 
-$$L_{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+[
+L_{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2
+]
 
-**Gradient:**
-$$\frac{\partial L_{MSE}}{\partial \hat{y}_i} = -\frac{2}{n}(y_i - \hat{y}_i)$$
+**Gradient**
+[
+\frac{\partial L_{MSE}}{\partial \hat{y}_i} = -\frac{2}{n}(y_i - \hat{y}_i)
+]
 
-**Convergence Properties:**
-- Linear gradient with respect to error
-- Sensitive to outliers (squared term amplifies large errors)
-- Smooth optimization landscape for small errors
-- Can lead to slow convergence when predictions are very wrong
+**Convergence Properties**
 
+* Linear gradient with respect to error
+* Sensitive to outliers
+* Smooth optimization landscape
+* Can converge slowly for large initial errors
 
+---
 
-#### **Binary Cross-Entropy (BCE) - Binary Classification**
+#### Binary Cross-Entropy (BCE) — Binary Classification
 
-$$L_{BCE} = -\frac{1}{n}\sum_{i=1}^{n}\left[y_i\log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)\right]$$
+[
+L_{BCE} = -\frac{1}{n}\sum_{i=1}^{n}[y_i\log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)]
+]
 
-**Gradient (with sigmoid output):**
-$$\frac{\partial L_{BCE}}{\partial z_i} = \hat{y}_i - y_i$$
+**Gradient (with sigmoid output)**
+[
+\frac{\partial L_{BCE}}{\partial z_i} = \hat{y}_i - y_i
+]
 
-where z is the logit (input to sigmoid).
+**Convergence Properties**
 
-**Convergence Properties:**
-- Larger gradients when predictions are confidently wrong
-- Faster convergence than MSE for classification
-- Well-suited for sigmoid outputs (natural pairing)
-- Can suffer from numerical instability if outputs are exactly 0 or 1
+* Strong gradients for confident but incorrect predictions
+* Faster convergence than MSE for classification
+* Numerically unstable if predictions reach 0 or 1
 
+---
 
-#### **Categorical Cross-Entropy (CCE) - Multi-class Classification**
+#### Categorical Cross-Entropy (CCE) — Multi-Class Classification
 
-$$L_{CCE} = -\frac{1}{n}\sum_{i=1}^{n}\sum_{c=1}^{C}y_{i,c}\log(\hat{y}_{i,c})$$
+[
+L_{CCE} = -\frac{1}{n}\sum_{i=1}^{n}\sum_{c=1}^{C} y_{i,c}\log(\hat{y}_{i,c})
+]
 
-**Gradient (with softmax output):**
-$$\frac{\partial L_{CCE}}{\partial z_{i,c}} = \hat{y}_{i,c} - y_{i,c}$$
+**Gradient (with softmax output)**
+[
+\frac{\partial L_{CCE}}{\partial z_{i,c}} = \hat{y}*{i,c} - y*{i,c}
+]
 
-**Convergence Properties:**
-- Similar benefits to BCE for multi-class problems
-- Encourages confident, correct predictions
-- Works naturally with softmax activation
+**Convergence Properties**
 
+* Encourages confident and correct predictions
+* Well-suited for softmax-based classifiers
 
-
+---
 
 ## Part 2: Conceptual Understanding
 
-### 2.1 When to Use Which Activation Function
+### 2.1 Choosing the Right Activation Function
 
-| Activation | Best Use Cases | Advantages | Disadvantages |
-|------------|---------------|------------|---------------|
-| **ReLU** | Hidden layers in deep networks, CNNs | Fast computation, no vanishing gradient for positive values, sparse activation | Dying ReLU problem (neurons can "die"), not zero-centered |
-| **Leaky ReLU** | Deep networks prone to dying ReLU | Prevents dying neurons | Small negative slope may not be optimal |
-| **Sigmoid** | Output layer for binary classification | Output in [0,1] for probabilities | Vanishing gradients, not zero-centered, slow convergence |
-| **Tanh** | Hidden layers in RNNs, when zero-centered outputs needed | Zero-centered, stronger gradients than sigmoid | Still suffers from vanishing gradients |
-| **Softmax** | Output layer for multi-class classification | Produces probability distribution | Only for output layer |
-| **Linear** | Output layer for regression | Unbounded output range | No non-linearity (useless in hidden layers) |
+| Activation     | Use Case            | Advantages                       | Disadvantages                 |
+| -------------- | ------------------- | -------------------------------- | ----------------------------- |
+| **ReLU**       | Hidden layers, CNNs | Fast, avoids vanishing gradients | Dying ReLU, not zero-centered |
+| **Leaky ReLU** | Deep networks       | Prevents dead neurons            | Fixed negative slope          |
+| **Sigmoid**    | Binary output layer | Probabilistic output             | Vanishing gradients           |
+| **Tanh**       | RNN hidden layers   | Zero-centered                    | Vanishing gradients           |
+| **Softmax**    | Multi-class output  | Probability distribution         | Output layer only             |
+| **Linear**     | Regression output   | Unbounded output                 | No non-linearity              |
 
-**General Guidelines:**
-- **Default choice**: ReLU for hidden layers
-- **Deep networks**: Consider variants like Leaky ReLU, PReLU, or ELU
-- **Output layers**: Match to task (sigmoid for binary, softmax for multi-class, linear for regression)
-- **RNNs/LSTMs**: Tanh commonly used due to zero-centered outputs
+**Guidelines**
 
-
-
-### 2.2 Visualizing Underfitting vs Overfitting
-
-#### **Underfitting (High Bias)**
-
-
-**Characteristics:**
-- it has a High training loss AND high validation loss
-- it consists of Small gap between training and validation loss
-- the Model is too simple to capture underlying patterns
-
+* Use **ReLU** as default for hidden layers
+* Use **sigmoid** for binary classification outputs
+* Use **softmax** for multi-class outputs
+* Use **linear** activation for regression
 
 ---
 
-#### **Good Fit (Optimal)**
+### 2.2 Underfitting vs Overfitting
 
+#### Underfitting (High Bias)
 
-**Characteristics:**
-- the Low training loss AND low validation loss
-- Small, acceptable gap between them
-- Model generalizes well to unseen data
+* High training loss
+* High validation loss
+* Small gap between losses
+* Model too simple to capture patterns
 
 ---
 
-#### **Overfitting (High Variance)**
+#### Good Fit (Optimal)
 
+* Low training loss
+* Low validation loss
+* Small, stable gap
+* Good generalization
 
-**Characteristics:**
-- Low (or decreasing) training loss
-- High (or increasing) validation loss
-- Large gap between training and validation loss
-- Model memorizes training data instead of learning patterns
+---
 
+#### Overfitting (High Variance)
 
-
+* Very low training loss
+* Increasing validation loss
+* Large gap between losses
+* Model memorizes training data
