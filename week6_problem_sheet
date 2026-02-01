@@ -1,0 +1,22 @@
+# Week 6 – Problem Sheet (Deep Reinforcement Learning)
+
+## DQN vs PPO
+- DQN is a value-based, off-policy method that learns a Q-function.
+- PPO is a policy-based, on-policy method that directly optimizes the policy.
+- DQN is more sample efficient due to experience replay.
+- PPO provides more stable learning and works well in continuous action spaces.
+
+## Policy-based vs Value-based Methods
+- Value-based methods are suitable for discrete action spaces.
+- Policy-based methods naturally handle continuous actions.
+- Policy gradients allow stochastic policies and smoother exploration.
+
+## Effect of Replay Buffer Size
+- Small replay buffers lead to correlated samples and unstable learning.
+- Larger buffers improve stability but may slow adaptation to new data.
+
+## Why PPO Clipping Helps
+- PPO clipping restricts large policy updates.
+- This prevents performance collapse during training.
+- In experiments, smaller clip values led to more conservative updates,
+  while the standard clip value (0.2) allowed better peak performance.
